@@ -42,6 +42,7 @@ export const signUp = async(req, res, next) => {
             message: "User created successfully",
             data: {
                 token,
+
                 user: newUser[0]
             }     
         });
@@ -54,47 +55,49 @@ export const signUp = async(req, res, next) => {
 }
 
 export const logIn = async(req, res, next) => {
-    // const session = await mongoose.startSession();
-    // session.startTransaction();
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-    // try{
-    //     const {email, password} = req.body;
+    try{
+        const {email, password} = req.body;
 
-    //     const existingUser = await User.findOne({email});
+        const existingUser = await User.findOne({email});
 
-    //     if(!existingUser){
-    //         const error = new Error("User not found");
-    //         error.statusCode = 404;
-    //         throw error;
-    //     }
+        if(!existingUser){
+            const error = new Error("User not found");
+            error.statusCode = 404;
+            throw error;
+        }
 
-    //     const isMatch = await bcrypt.compare(password, existingUser.password);
-    //     if(!isMatch){
-    //         const error = new Error("Invalid credentials");
-    //         error.statusCode = 401;
-    //         throw error;
-    //     }
+        const isMatch = await bcrypt.compare(password, existingUser.password);
 
-    //     const token = jwt.sign({userId: existingUser._id}, JWT_SECRET, {
-    //         expiresIn: JWT_EXPIRES_IN
-    //     });
+        if(!isMatch){
+            const error = new Error("Invalid credentials");
+            error.statusCode = 401;
+            throw error;
+        }
 
-    //     await session.commitTransaction();
-    //     session.endSession();
+        const token = jwt.sign({userId: existingUser._id}, JWT_SECRET, {
+            expiresIn: JWT_EXPIRES_IN
+        });
 
-    //     res.status(200).json({
-    //         success: true,
-    //         message: "User logged in successfully",
-    //         data: {
-    //             token,
-    //             user: existingUser
-    //         }
-    //     });
-    // }catch(error){
-    //     await session.abortTransaction();
-    //     se ssion.endSession();
-    //     next(error);
-    // }
+        res.status(200).json({
+            success: true,
+            message: "User logged in successfully",
+            data: {
+                token,
+               existingUser,
+            }
+        });
+    }catch(error){
+       
+        next(error);
+    }
 }
 
-export const logOut = async(req, res, next) => {}
+export const logOut = (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "User logged out successfully"
+    });
+}

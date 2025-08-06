@@ -65,7 +65,7 @@ const subscriptionSchema = new mongoose.Schema({
   },
 
 
-}({ timestamps: true }));
+}, { timestamps: true });
 
 subscriptionSchema.pre("save", function (next) {
   

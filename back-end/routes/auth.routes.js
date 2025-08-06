@@ -3,7 +3,7 @@ import { signUp, logIn, logOut } from "../controllers/auth.controller.js";
 
 const authRouter = Router();
 
-//paths: /api/v1/auth/...
+//paths: -> /api/v1/auth/...
 
 authRouter.post('/sign-up', signUp);
 

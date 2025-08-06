@@ -6,6 +6,8 @@ import subscriptionRouter from './routes/subscriptions.routes.js'; // Importing 
 import connectToDatabase from './database/mongodb.js'; // Importing the database connection function
 import errorMiddleware from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
+import arcjetMiddleware from './middlewares/arcjet.middleware.js';
+
 
 
 const app = express();
@@ -13,6 +15,7 @@ const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
 app.use(cookieParser()); // Middleware to parse cookies
+app.use(arcjetMiddleware); // Middleware for Arcjet protection
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);

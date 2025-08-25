@@ -9,12 +9,12 @@ A **MERN stack** application for managing personal subscriptions. This tool help
 
 ## 🌟 Highlights
 
-- 🗂️ **Modular File Structure** – Separate folders for models, routes, and middleware  
-- 🛡️ **Secure Authorization** – Middleware for authentication and role-based access  
-- ⚙️ **Error Handling** – Centralized error middleware for robust request handling  
-- 🔑 **Environment Configurations** – `.env` files for dev/production to keep secrets safe  
-- 🌐 **Tested API** – Routes validated using [httpie](https://httpie.io/)  
-- 📧 **Future Feature** – Email notifications for monthly subscription summaries  
+-  **Modular File Structure** – Separate folders for models, routes, and middleware  
+-  **Secure Authorization** – Middleware for authentication and role-based access  
+-  **Error Handling** – Centralized error middleware for robust request handling  
+-  **Environment Configurations** – `.env` files for dev/production to keep secrets safe  
+-  **Tested API** – Routes validated using [httpie](https://httpie.io/)  
+
 
 ---
 
@@ -58,9 +58,9 @@ It is designed with modularity and scalability in mind, making it simple to exte
 
 ---
 
+## 🚀 Future Improvement
 
-# Development (with nodemon if configured)
-npm run dev
+- **Email Notification** - Detailing the monthly spending.
+- **Dashboard** - Creating an intuitive dashboard capable clearly conveying the spending in an easy to understand way.
+- **AI** - Incorporate AI powered recommendations on how users can optimize spending.
 
-# Production
-npm start

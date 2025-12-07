@@ -7,6 +7,7 @@ import connectToDatabase from './database/mongodb.js'; // Importing the database
 import errorMiddleware from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
 import arcjetMiddleware from './middlewares/arcjet.middleware.js';
+import cors from 'cors';
 
 
 
@@ -16,6 +17,11 @@ app.use(express.json()); // Middleware to parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
 app.use(cookieParser()); // Middleware to parse cookies
 app.use(arcjetMiddleware); // Middleware for Arcjet protection
+app.use(cors({
+  origin: 'http://localhost:8080', 
+  credentials: true, 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);

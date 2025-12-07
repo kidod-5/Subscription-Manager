@@ -55,13 +55,11 @@ export const signUp = async(req, res, next) => {
 }
 
 export const logIn = async(req, res, next) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
     try{
         const {email, password} = req.body;
 
-        const existingUser = await User.findOne({email});
+        // Find user and explicitly select password field
+        const existingUser = await User.findOne({email}).select('+password');
 
         if(!existingUser){
             const error = new Error("User not found");
@@ -69,7 +67,13 @@ export const logIn = async(req, res, next) => {
             throw error;
         }
 
+        // Add logging to debug
+        console.log('Stored password hash:', existingUser.password);
+        console.log('Input password:', password);
+
         const isMatch = await bcrypt.compare(password, existingUser.password);
+        
+        console.log('Password match result:', isMatch);
 
         if(!isMatch){
             const error = new Error("Invalid credentials");
@@ -81,16 +85,19 @@ export const logIn = async(req, res, next) => {
             expiresIn: JWT_EXPIRES_IN
         });
 
+        // Remove password from response
+        const userResponse = existingUser.toObject();
+        delete userResponse.password;
+
         res.status(200).json({
             success: true,
             message: "User logged in successfully",
             data: {
                 token,
-               existingUser,
+                user: userResponse,
             }
         });
     }catch(error){
-       
         next(error);
     }
 }

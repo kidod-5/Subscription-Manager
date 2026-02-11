@@ -66,9 +66,15 @@ const Auth = () => {
 
       <Card className="w-full max-w-md glass shadow-glow animate-fade-in relative">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center shadow-lg">
+          <button
+            type="button"
+            onClick={() => navigate("/")}
+            aria-label="Go to Home"
+            title="Go to Home"
+            className="mx-auto w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
             <CreditCard className="w-8 h-8 text-primary-foreground" />
-          </div>
+          </button>
           <div>
             <CardTitle className="text-2xl font-display">
               {isLogin ? "Welcome back" : "Create account"}

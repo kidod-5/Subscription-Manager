@@ -51,7 +51,7 @@ const Header = () => {
             <CreditCard className="w-5 h-5 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="font-display font-bold text-lg">SubTracker</h1>
+            <h1 className="font-display font-bold text-lg">SubHub</h1>
             <p className="text-xs text-muted-foreground hidden sm:block">
               Subscription Manager
             </p>

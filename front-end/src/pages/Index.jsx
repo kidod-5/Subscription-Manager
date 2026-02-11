@@ -53,7 +53,7 @@ const Index = () => {
             <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center shadow-lg">
               <CreditCard className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="font-display font-bold text-xl">SubTracker</span>
+            <span className="font-display font-bold text-xl">SubHub</span>
           </div>
           <Button
             onClick={() => navigate("/auth")}
@@ -144,7 +144,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/50 py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>© 2024 SubTracker. Built with React & Express.</p>
+          <p>© 2024 SubHub. Built with React & Express.</p>
         </div>
       </footer>
     </div>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="orbit-stage" id="stage"></div>
+    <style>
+                :root {
+        --ring-w: 700px;     /* ellipse width  */
+        --ring-h: 320px;     /* ellipse height */
+        --icon-size: 64px;
+        --spin-seconds: 14;
+        --front-pop: 1.15;
+        --back-dim: 0.35;
+        --tilt: 0.3;
+        }
+
+        .orbit-stage {
+        position: relative;
+        width: var(--ring-w);
+        height: var(--ring-h);
+        margin: auto;
+        }
+
+        /* Floating card */
+        .node {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: calc(var(--icon-size) + 28px);
+        height: calc(var(--icon-size) + 28px);
+        transform: translate(-50%,-50%);
+        border-radius: 20px;
+        display: grid;
+        place-items: center;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.18);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+        backdrop-filter: blur(8px);
+        }
+
+        .node img {
+        width: var(--icon-size);
+        height: var(--icon-size);
+        object-fit: contain;
+        pointer-events: none;
+        }
+
+    </style>
+    <script>
+        
+    const stage = document.getElementById("stage");
+
+    /* Replace with your real icons later */
+    const brands = [
+    { name: "Netflix", label: "N" },
+    { name: "Spotify", label: "S" },
+    { name: "Hulu", label: "H" },
+    { name: "Prime", label: "P" },
+    { name: "Disney+", label: "D" },
+    { name: "Apple", label: "A" },
+    { name: "YouTube", label: "Y" },
+    { name: "Notion", label: "No" },
+    { name: "GitHub", label: "Gh" },
+    { name: "Slack", label: "Sl" }
+    ];
+
+    /* Temporary SVG badges so you see something */
+    function svgBadge(text) {
+    const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128">
+        <rect x="8" y="8" width="112" height="112" rx="26" fill="white"/>
+        <text x="64" y="78" text-anchor="middle"
+        font-size="48" font-family="Arial" font-weight="700" fill="#111">${text}</text>
+    </svg>`;
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    }
+
+    /* Create nodes */
+    const N = brands.length;
+    const nodes = [];
+
+    brands.forEach((b, i) => {
+    const el = document.createElement("div");
+    el.className = "node";
+
+    const img = document.createElement("img");
+    img.src = svgBadge(b.label);   // replace with b.src later
+    img.alt = b.name;
+
+    el.appendChild(img);
+    stage.appendChild(el);
+
+    nodes.push({
+        el,
+        phase: (Math.PI * 2 * i) / N
+    });
+    });
+
+    /* Animation loop */
+    const speedSeconds = parseFloat(getComputedStyle(document.documentElement)
+                        .getPropertyValue("--spin-seconds"));
+
+    function animate(time) {
+    const rect = stage.getBoundingClientRect();
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+
+    const a = rect.width * 0.45;   // ellipse x-radius
+    const b = rect.height * 0.35;  // ellipse y-radius
+
+    const base = (time / 1000) * (Math.PI * 2 / speedSeconds);
+
+    const frontPop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--front-pop"));
+    const backDim  = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--back-dim"));
+    const tilt     = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--tilt"));
+
+    // Compute positions
+    const arranged = nodes.map(n => {
+        const theta = n.phase + base;
+        const x = cx + a * Math.cos(theta);
+        const y = cy + b * Math.sin(theta);
+        const depth = Math.sin(theta);  // -1 back → +1 front
+        return { ...n, x, y, depth };
+    }).sort((p,q) => p.depth - q.depth);
+
+    arranged.forEach((n, i) => {
+        const z = (n.depth + 1) / 2;               // normalize 0..1
+        const scale = 0.7 + z * (frontPop - 0.7); // front bigger
+        const opacity = backDim + z * (1 - backDim);
+        const yTilted = cy + (n.y - cy) * (1 + (z - 0.5) * tilt);
+        const lift = (z - 0.5) * 12;
+
+        n.el.style.left = `${n.x}px`;
+        n.el.style.top = `${yTilted}px`;
+        n.el.style.opacity = opacity;
+        n.el.style.zIndex = 100 + i;
+        n.el.style.transform =
+        `translate(-50%,-50%) scale(${scale}) translateY(${-lift}px)`;
+    });
+
+    requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+
+    </script>
+</body>
+</html>
